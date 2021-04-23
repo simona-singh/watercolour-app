@@ -1,0 +1,68 @@
+<TabManager>:
+    size_hint: .99, .99
+    pos_hint: {'center_x': .5, 'center_y': .5}
+    do_default_tab: False
+
+
+    #text_input: text_input
+
+    TabbedPanelItem:
+        text: 'File Chooser'
+        FileBrowser:
+
+    TabbedPanelItem:
+        text: 'Colour Viewer'
+        ColourViewer:
+
+    TabbedPanelItem:
+        text: 'Tools/Comparison'
+        ToolManager:
+
+<FileBrowser>:
+    id: filebrowser
+    orientation: 'vertical'
+
+    BoxLayout:
+        Button:
+            text: 'Load'
+            on_release: app.filebrowser.show_load()
+        Button:
+            text: 'Confirm'
+
+    BoxLayout:
+        TextInput:
+            id: text_input
+            text: ''
+
+        RstDocument:
+            text: text_input.text
+            show_errors: True
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<ColourViewer>:
+
+<ToolManager>:
+
+<ToolComparison>:
+
+<ToolOpened>:
+
+<Tool>:
