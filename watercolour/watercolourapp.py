@@ -7,9 +7,9 @@ from watercolour.toolmanager import ToolManager
 
 class WatercolourApp(App):
     tab_mgr = ObjectProperty
-    filebrowser = FileBrowser()
-    colourviewer = ColourViewer()
-    toolmanager = ToolManager()
+    # filebrowser = FileBrowser()
+    # colourviewer = ColourViewer()
+    # toolmanager = ToolManager()
 
     def build(self):
         self.tab_mgr = TabManager()

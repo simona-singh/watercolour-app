@@ -2,9 +2,8 @@
     size_hint: .99, .99
     pos_hint: {'center_x': .5, 'center_y': .5}
     do_default_tab: False
-
-
-    #text_input: text_input
+    tab_pos: 'top_left'
+    tab_width: self.width / 4
 
     TabbedPanelItem:
         text: 'File Chooser'
@@ -18,33 +17,58 @@
         text: 'Tools/Comparison'
         ToolManager:
 
+    TabbedPanelItem:
+        text: 'Help'
+        tab_pos: 'top_right'
+
+
 <FileBrowser>:
     id: filebrowser
     orientation: 'vertical'
 
-    BoxLayout:
-        Button:
-            text: 'Load'
-            on_release: app.filebrowser.show_load()
-        Button:
-            text: 'Confirm'
+    #text_input: text_input
+    confirm_image: confirm_image
 
     BoxLayout:
-        TextInput:
-            id: text_input
-            text: ''
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+            Button:
+                text: 'Load Image'
+                on_release: self.parent.parent.parent.show_load()
+            Button:
+                text: 'Load previous'
+            Button:
+                text: 'Confirm'
+            Button:
+                text: 'Save'
 
-        RstDocument:
-            text: text_input.text
-            show_errors: True
+        AnchorLayout:
+            canvas:
+                Color:
+                    rgba: 1, 1, 0, 1
+            anchor_x: 'center'
+            anchor_y: 'center'
+            Image:
+                id: confirm_image
+                source: 'images/146081236_890288241737602_904200711451988803_n.png'
+
+                allow_stretch: False
+                keep_ratio: True
+                keep_data: True
+
 
 <LoadDialog>:
+    #size_hint: 0.9, 0.9
+    path: '/images'
     BoxLayout:
         size: root.size
         pos: root.pos
         orientation: "vertical"
         FileChooserListView:
             id: filechooser
+            path: 'D:\Projects\watercolour-app\images'
 
         BoxLayout:
             size_hint_y: None
@@ -58,8 +82,100 @@
                 on_release: root.load(filechooser.path, filechooser.selection)
 
 <ColourViewer>:
+    id: colour_viewer
+    cols: 1
+    colour_display: colour_display
+
+    BoxLayout:
+        orientation: 'vertical'
+        AnchorLayout:
+            id: anchor_layout
+
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+
+            anchor_x: 'center'
+            anchor_y: 'center'
+
+            ImageViewer:
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.5
+        Button:
+            id: colour_display
+            text: 'Colour'
+        Button:
+            text: 'Similar'
+        Button:
+            text: 'Chart'
+
+<ImageViewer>:
+    id: image_viewer
+    actual_image: actual_image
+
+    canvas:
+        Color:
+            rgba: 1,0,0,1
+
+    size_hint_y: None
+    size_hint_x: None
+    size: root.ids.actual_image.norm_image_size[0],root.ids.actual_image.norm_image_size[1]
+    pos_hint: {"x":0.5, "y":0.5}
+    Image:
+        id: actual_image
+
+        source: 'images/color_wheel.png'
+
+        size: self.parent.parent.size
+        allow_stretch: False
+        keep_ratio: True
+        keep_data: True
 
 <ToolManager>:
+    cols: 1
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.1
+
+        BoxLayout:
+            orientation: 'horizontal'
+
+            Button:
+                id: btn
+                text: 'Dropdown'
+                anchor_x: 'center'
+                anchor_y: 'top'
+                on_parent: dropdown.dismiss()
+                on_release: dropdown.open(self)
+
+            DropDown:
+                id: dropdown
+
+                on_select: btn.text = '{}'.format(args[1])
+                Button:
+                    text: 'Original'
+                    size_hint_y: None
+                    on_release: dropdown.select('Original')
+
+                Button:
+                    text: 'Values'
+                    size_hint_y: None
+                    on_release: dropdown.select('Values')
+
+                Button:
+                    text: 'Average Colour'
+                    size_hint_y: None
+                    on_release: dropdown.select('Average Colour')
+
+            Button:
+                text: 'Add'
+            Button:
+                text: '?'
+    Button:
+        text: 'testwidget'
 
 <ToolComparison>:
 
