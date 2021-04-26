@@ -3,4 +3,4 @@ from kivy.properties import ObjectProperty
 from kivy.uix.tabbedpanel import TabbedPanel
 
 class TabManager(TabbedPanel):
-    pass
+    pass#tool_manager = ObjectProperty(None)

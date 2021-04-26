@@ -10,6 +10,7 @@ class WatercolourApp(App):
     # filebrowser = FileBrowser()
     # colourviewer = ColourViewer()
     # toolmanager = ToolManager()
+    img_path = None
 
     def build(self):
         self.tab_mgr = TabManager()

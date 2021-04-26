@@ -8,6 +8,8 @@ from kivy.core.image import Image as Image
 
 import os
 from kivy.clock import Clock
+from kivy.factory import Factory
+from kivy.app import App
 
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
@@ -17,10 +19,11 @@ class FileBrowser(BoxLayout):
     loadfile = ObjectProperty(None)
     savefile = ObjectProperty(None)
     confirm_image = ObjectProperty(None)
-    #global PATH
+    path = None
 
     def __init__(self, **kwargs):
         super(FileBrowser, self).__init__(**kwargs)
+        self.app = App.get_running_app()
         #Clock.schedule_once(self.on_start)
 
     #def on_start(self, *args):
@@ -39,9 +42,22 @@ class FileBrowser(BoxLayout):
     def load(self, path, filename):
         path = os.path.join(path, filename[0])
         self.ids.confirm_image.source = path
+        self.parent.parent.tool_manager.set_path(path)
+        self.parent.parent.colour_viewer.image_viewer.set_path(path)
+        #self.app.root.ids.tool_image.source = path
+        #Factory.Tool.set_path(path)
+        #self.ids.actual_image.source = path
+        #root.ids.tool.ids.tool_image.source = path
+        self.set_path(path)
         #self.PATH = os.path.join(path, filename[0])
 
         #with open(os.path.join(path, filename[0]), encoding="utf8") as stream:
          #   self.text_input.text = stream.read()
 
         self.dismiss_popup()
+
+    def get_path(self):
+        return self.path
+
+    def set_path(self, path):
+        self.path = path
