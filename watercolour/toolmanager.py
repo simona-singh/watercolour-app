@@ -1,10 +1,16 @@
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from watercolour.tool import Tool
+from kivy.properties import ObjectProperty
 
 class ToolManager(GridLayout):
     tools = []
     path = None
+    widget_display = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(ToolManager, self).__init__(**kwargs)
+        #self.widget_display.bind(minimum_height=self.widget_display.setter('height'))
 
     def add_tool(self):
         tool = Tool(self.path)

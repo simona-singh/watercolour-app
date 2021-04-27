@@ -90,7 +90,7 @@
     cols: 1
     colour_display: colour_display
     image_viewer: image_viewer
-
+    panel: panel
     BoxLayout:
         orientation: 'vertical'
         AnchorLayout:
@@ -108,6 +108,7 @@
 
 
     BoxLayout:
+        id: panel
         orientation: 'horizontal'
         size_hint_y: 0.5
         Button:
@@ -116,8 +117,7 @@
             text: 'Colour'
         Button:
             text: 'Similar'
-        Button:
-            text: 'Chart'
+            on_release: root.ids.image_viewer.similar_colours()
 
 <ImageViewer>:
     id: image_viewer
@@ -144,6 +144,8 @@
 <ToolManager>:
     cols: 1
     id: tool_manager
+    dropdown: dropdown.__self__
+    widget_display: widget_display
     BoxLayout:
         orientation: 'vertical'
         size_hint_y: 0.1
@@ -164,10 +166,14 @@
 
                 on_select: btn.text = '{}'.format(args[1])
                 Button:
-                    text: 'Original'
+                    text: 'Temperature'
                     size_hint_y: None
-                    on_release: dropdown.select('Original')
+                    on_release: dropdown.select('Temperature')
 
+                Button:
+                    text: 'Saturation'
+                    size_hint_y: None
+                    on_release: dropdown.select('Saturation')
                 Button:
                     text: 'Values'
                     size_hint_y: None
@@ -198,9 +204,9 @@
                     size: self.size
             id: widget_display
             orientation: 'vertical'
-            size_hint: 1, None
-            width: self.minimum_width
-            minimum_height: self.parent.height
+            size_hint_y: None
+            #width: self.minimum_width
+            #minimum_height: self.parent.height
             cols: 3
 
 <ToolComparison>:

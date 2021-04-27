@@ -44,6 +44,7 @@ class FileBrowser(BoxLayout):
         self.ids.confirm_image.source = path
         self.parent.parent.tool_manager.set_path(path)
         self.parent.parent.colour_viewer.image_viewer.set_path(path)
+        self.parent.parent.colour_viewer.image_viewer.colour_chart()
         #self.app.root.ids.tool_image.source = path
         #Factory.Tool.set_path(path)
         #self.ids.actual_image.source = path
