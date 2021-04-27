@@ -23,6 +23,7 @@ class ImageViewer(RelativeLayout):
     path = None
     last_x, last_y = 0, 0
     panel = ObjectProperty(None)
+    chart = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -97,9 +98,13 @@ class ImageViewer(RelativeLayout):
         ax.imshow(dom_patch)
         ax.axis('off')
 
-        chart = FigureCanvasKivyAgg(plt.gcf())
+        self.chart = FigureCanvasKivyAgg(plt.gcf())
 
-        self.parent.parent.parent.panel.add_widget(chart)
+        self.parent.parent.parent.panel.add_widget(self.chart)
+
+    def remove_chart(self):
+        if self.chart is not None:
+            self.parent.parent.parent.panel.remove_widget(self.chart)
 
     def set_path(self, path):
         self.path = path
