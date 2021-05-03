@@ -190,24 +190,26 @@
             Button:
                 text: '?'
     ScrollView:
-        bar_width: '2dp'
-        bar_color: 5, 10, 15, .8
-        bar_inactive_color: 5, 20, 10, .5
+        #bar_width: '2dp'
+        #bar_color: 5, 10, 15, .8
+        #bar_inactive_color: 5, 20, 10, .5
         size_hint_y: 1
         size_hint_x: 1
-        BoxLayout:
+
+        GridLayout:
             canvas:
                 Color:
                     rgba: 0, 1, 0, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size
+
             id: widget_display
-            orientation: 'vertical'
-            size_hint_y: None
-            #width: self.minimum_width
-            #minimum_height: self.parent.height
-            cols: 3
+
+            #orientation: 'vertical'
+            size_hint: 1, None
+            height: self.minimum_height
+            cols: 1
 
 <ToolComparison>:
 
@@ -217,8 +219,10 @@
     id: toool
     tool_image: tool_image
     orientation: 'horizontal'
+    size_hint: 1, None
     Label:
+        id: lbl
         text: 'tool'
     Image:
         id: tool_image
-        source: 'D:\Projects\watercolour-app\images\color_wheel.png'
+        source: '.\images\color_wheel.png'

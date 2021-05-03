@@ -31,3 +31,6 @@ class Tool(BoxLayout):
     def set_path(self, path):
         self.path = path
         self.ids.tool_image.source = path
+
+    def set_label(self, name):
+        self.ids.lbl.text = name
