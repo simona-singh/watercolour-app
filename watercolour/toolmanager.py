@@ -31,6 +31,7 @@ class ToolManager(GridLayout):
             tool = AverageColour(self.path)
 
         tool.set_label(name)
+        self.tools.append(tool)
         self.ids.widget_display.add_widget(tool)
 
     def remove_tool(self):
@@ -46,3 +47,13 @@ class ToolManager(GridLayout):
 
     def set_path(self, path):
         self.path = path
+
+    def hide_others(self, current):
+        for tool in self.tools:
+            if tool is not current:
+                tool.hide()
+
+    def show_others(self, current):
+        for tool in self.tools:
+            if tool is not current:
+                tool.show()
