@@ -72,7 +72,7 @@ class Tool(BoxLayout):
         """Handles UI widgets for returning back to list view."""
         print("closing")
         self.ids.tool_image.size_hint_y = 1
-        self.height = 100
+        self.height = self.parent.parent.parent.tool_height
         self.orientation = 'horizontal'
         self.visible = False
         self.parent.size_hint = (1, None)
@@ -110,7 +110,7 @@ class Tool(BoxLayout):
 
     def show(self):
         """Enables and shows tool."""
-        self.height = 100
+        self.height = self.parent.parent.parent.tool_height
         self.opacity = 1
         self.disabled = False
 
@@ -126,3 +126,7 @@ class Tool(BoxLayout):
 
     def close_remove_checkbox(self):
         self.remove_widget(self.checkbox)
+
+    def zoom(self, height):
+        #self.ids.tool_image.height += 20
+        self.height = height

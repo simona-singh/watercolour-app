@@ -153,11 +153,10 @@
     BoxLayout:
         orientation: 'vertical'
         size_hint_y: 0.1
+        id: contain
 
-        BoxLayout:
-            orientation: 'horizontal'
-            id: buttons
-
+        ButtonDisplay:
+            id: button_display
             Button:
                 id: btn
                 text: 'Dropdown'
@@ -193,15 +192,13 @@
                 text: 'Add'
                 on_release: self.parent.parent.parent.add_tool()
             Button:
-                text: 'Zoom+'
+                text: '+'
                 on_release: self.parent.parent.parent.zoom_in()
+                size_hint_x: 0.2
             Button:
-                text: 'Zoom-'
+                text: '-'
                 on_release: self.parent.parent.parent.zoom_out()
-            Button:
-                id: remove_btn
-                text: 'Remove'
-                on_release: self.parent.parent.parent.open_remove_checkboxes(None)
+                size_hint_x: 0.2
 
     ScrollView:
         #bar_width: '2dp'

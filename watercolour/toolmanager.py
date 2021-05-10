@@ -11,6 +11,12 @@ from kivy.factory import Factory
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.button import Button
 Factory.register('saturation', cls=Saturation)
+from kivy.clock import Clock
+
+
+class ButtonDisplay(BoxLayout):
+    pass
+
 
 class ToolManager(GridLayout):
     """Controls the display containing the list of tools.
@@ -19,10 +25,23 @@ class ToolManager(GridLayout):
     tools = []
     path = None
     widget_display = ObjectProperty(None)
+    remove_button = Button(text="Remove")
+    cancel_button = Button(text="Cancel")
+    confirm_button = Button(text="Confirm Remove")
+    tool_height = 100
 
     def __init__(self, **kwargs):
         super(ToolManager, self).__init__(**kwargs)
+        Clock.schedule_once(self.on_start)
+        #self.button_display.add_widget(remove_button)
+        #self.ids.button_display.add_widget(remove_button)
         #self.widget_display.bind(minimum_height=self.widget_display.setter('height'))
+
+    def on_start(self, *args):
+        self.remove_button.bind(on_release=self.open_remove_checkboxes)
+        #self.confirm_button.bind(on_release=self.)
+        self.cancel_button.bind(on_release=self.close_remove_checkboxes)
+        self.ids.button_display.add_widget(self.remove_button)
 
     def add_tool(self):
         """Selects corresponding tool from drop down selection.
@@ -40,6 +59,7 @@ class ToolManager(GridLayout):
             tool = AverageColour(self.path)
 
         tool.set_label(name)
+        tool.height = self.tool_height
         self.tools.append(tool)
         self.ids.widget_display.add_widget(tool)
 
@@ -76,27 +96,33 @@ class ToolManager(GridLayout):
         return self.tools
 
     def open_remove_checkboxes(self, event):
-        print("inside")
-        confirm = Button(text='Confirm')
-        self.ids.buttons.add_widget(confirm)
-        print(self.ids.remove_btn.text)
+        """Enters mode to remove tools.
+        Calls Tool method to add checkbox alongside it.
+        Adds 'Cancel' and 'Confirm' buttons."""
+
         for tool in self.tools:
             tool.open_remove_checkbox()
-        self.ids.remove_btn.text = 'Cancel'
-        self.ids.remove_btn.bind(on_press=self.close_remove_checkboxes)
-        #self.ids.remove_btn.on_release = self.close_remove_checkboxes
+
+        self.ids.button_display.remove_widget(self.remove_button)
+        self.ids.button_display.add_widget(self.cancel_button)
+        self.ids.button_display.add_widget(self.confirm_button)
 
     def close_remove_checkboxes(self, event):
-        self.ids.remove_btn.text = 'Remove'
-        self.ids.remove_btn.bind(on_press=self.open_remove_checkboxes)
-        #self.ids.remove_btn.on_release = self.open_remove_checkboxes
         for tool in self.tools:
-            tool.open_remove_checkbox()
+            tool.close_remove_checkbox()
+
+        self.ids.button_display.remove_widget(self.confirm_button)
+        self.ids.button_display.remove_widget(self.cancel_button)
+        self.ids.button_display.add_widget(self.remove_button)
 
     def zoom_in(self):
+        """Enlarges all tools."""
+        self.tool_height += 20
         for tool in self.tools:
-            h = tool.ids.tool_image.height
-            tool.ids.tool_image.height = h + 10
+            tool.zoom(self.tool_height)
 
     def zoom_out(self):
-        pass
+        """Shrinks all tools"""
+        self.tool_height -= 20
+        for tool in self.tools:
+            tool.zoom(self.tool_height)

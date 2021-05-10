@@ -93,16 +93,19 @@ class ThresholdingValues(Tool):
 
     # i.e when pressed increase the value
     def on_blur(self, instance, blur):
+        """Handles blurControl slider."""
         #print("blurb")
         #self.brightnessValue.text = "% d" % blur
         self.blurValue = blur
         self.update_photo(self.blurValue, self.highlightValue, self.shadowValue)
 
     def on_highlight(self, instance, highlight):
+        """Handles highlightControl slider."""
         self.highlightValue = highlight
         self.update_photo(self.blurValue, self.highlightValue, self.shadowValue)
 
     def on_shadow(self, instance, shadow):
+        """Handles shadowControl slider."""
         self.shadowValue = shadow
         self.update_photo(self.blurValue, self.highlightValue, self.shadowValue)
     # The app class
@@ -111,6 +114,7 @@ class ThresholdingValues(Tool):
         self.label.text = "Mouse coords = " + str(pos)
 
     def get_settings(self):
+        """Updates settings array and returns it for FileBrowser to save session."""
         self.settings["highlightValue"] = self.highlightValue
         self.settings["shadowValue"] = self.shadowValue
         self.settings["blurValue"] = self.blurValue

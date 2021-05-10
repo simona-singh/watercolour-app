@@ -11,28 +11,12 @@ from color_temp import temperature_to_rgb
 class Temperature(Tool):
     coolValue = 1
     coolControl = Slider(min=35, max=65, value=50)
-    warmValue = 1
-    warmControl = Slider(min=0, max=255, value=0)
     kelvin = {}
     lookup = []
     lookuptable = []
 
     def __init__(self, path):
         super().__init__(path)
-        f = open(".\watercolour\kelvin", "r")
-        contents = f.read()
-        self.kelvin = ast.literal_eval(contents)
-        f.close()
-
-        #for i in range(1000, 26600, 100):
-        #    print(i)
-        #    rgb = temperature_to_rgb(i)
-        #    print(i, rgb)
-        #    self.lookup.append(rgb)
-        #self.lookup = np.array(self.lookup).clip(0, 255).astype('uint8')
-        #print(len(self.lookup))
-        #y = list(range(1000, 26600, 100))
-        #self.lookuptable = self.spreadLookupTable(y, self.lookup)
 
     def spreadLookupTable(self, x, y):
         spline = UnivariateSpline(x, y)
@@ -40,21 +24,14 @@ class Temperature(Tool):
 
     def add_settings(self):
         self.add_widget(self.coolControl)
-        self.add_widget(self.warmControl)
         self.coolControl.bind(value=self.on_cool)
-        self.warmControl.bind(value=self.on_warm)
 
     def remove_settings(self):
         self.remove_widget(self.coolControl)
-        self.remove_widget(self.warmControl)
 
     def on_cool(self, instance, cool):
         self.coolValue = cool
-        self.update_photo(self.coolValue, self.warmValue)
-
-    def on_warm(self, instance, warm):
-        self.warmValue = warm
-        self.update_photo(self.coolValue, self.warmValue)
+        self.update_photo(self.coolValue)
 
     # slider should be a number from 0 - 100
     def adjustTemps(self, slider):
@@ -65,7 +42,7 @@ class Temperature(Tool):
         print(slider, new_temps)
         return new_temps
 
-    def update_photo(self, temperature, warm):
+    def update_photo(self, temperature):
         self.img_source = cv2.imread(self.path)
         other = self.img_source.copy()
 
