@@ -7,8 +7,14 @@ from watercolour.tools.averagecolour import AverageColour
 from watercolour.tools.saturation import Saturation
 from watercolour.tools.temperature import Temperature
 from watercolour.tools.thresholdingvalues import ThresholdingValues
+from kivy.factory import Factory
+
+Factory.register('saturation', cls=Saturation)
 
 class ToolManager(GridLayout):
+    """Controls the display containing the list of tools.
+    Manages adding and removing tools.
+    Provides FileBrowser access to tools for saving sessions."""
     tools = []
     path = None
     widget_display = ObjectProperty(None)
@@ -18,6 +24,8 @@ class ToolManager(GridLayout):
         #self.widget_display.bind(minimum_height=self.widget_display.setter('height'))
 
     def add_tool(self):
+        """Selects corresponding tool from drop down selection.
+        Adds tool to list of current tools and adds it to display."""
         name = self.ids.btn.text
         tool = None
 
@@ -38,6 +46,7 @@ class ToolManager(GridLayout):
         pass
 
     def add_widget_to_grid(self):
+        """Not used?"""
         img = Image(source='D:/Projects/watercolour-spikes/146081236_890288241737602_904200711451988803_n.png')
         img.size_hint = 1, None
         #img.width = self.ids.widget_display.width / self.ids.widget_display.cols
@@ -46,14 +55,21 @@ class ToolManager(GridLayout):
         self.ids.widget_display.add_widget(img)
 
     def set_path(self, path):
+        """Updates local path variable."""
         self.path = path
 
     def hide_others(self, current):
+        """Hides all tools except selected so the current tool can be expanded."""
         for tool in self.tools:
             if tool is not current:
                 tool.hide()
 
     def show_others(self, current):
+        """Shows all tools after current tool has been minimised."""
         for tool in self.tools:
             if tool is not current:
                 tool.show()
+
+    def get_tools(self):
+        """Returns list of tool objects."""
+        return self.tools

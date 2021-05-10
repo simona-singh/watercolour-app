@@ -6,6 +6,7 @@ from watercolour.colourviewer import ColourViewer
 from watercolour.toolmanager import ToolManager
 
 class WatercolourApp(App):
+    """The app."""
     tab_mgr = ObjectProperty
     # filebrowser = FileBrowser()
     # colourviewer = ColourViewer()

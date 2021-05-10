@@ -8,6 +8,11 @@ import cv2
 import numpy as np
 
 class ThresholdingValues(Tool):
+    """This tool displays a greyscale image separated into three values to represent shadows, mid-tones and highlights.
+    Contains 3 sliders:
+    highlight - the threshold for pixels to convert to white
+    shadow - the threshold for pixels to convert to black
+    blur - the amount of blur applied before thresholding to simplify shapes/detail."""
     highlightValue = 200
     shadowValue = 50
     blurValue = 1
@@ -18,10 +23,15 @@ class ThresholdingValues(Tool):
     shadowLabel = Label(text='shadow')
     highlightLabel = Label(text='highlight')
 
+    settings = {"highlightValue": highlightValue,
+                "shadowValue": shadowValue,
+                "blurValue": blurValue}
+
     def __init__(self, path):
         super().__init__(path)
 
     def add_settings(self):
+        """Overrides base class to add widgets to self."""
         self.ids.lbl.text = 'Values'
         # self.add_widget(self.img)
         self.add_widget(self.highlightLabel)
@@ -46,7 +56,12 @@ class ThresholdingValues(Tool):
         self.highlightControl.bind(value=self.on_highlight)
         self.shadowControl.bind(value=self.on_shadow) # change to all one function
 
+        self.shadowControl.value = self.settings.get("shadowValue")
+        self.blurControl.value = self.settings.get("blurValue")
+        self.highlightControl.value = self.settings.get("highlightValue")
+
     def remove_settings(self):
+        """"Overrides base class to remove widgets from self."""
         self.remove_widget(self.highlightControl)
         self.remove_widget(self.shadowControl)
         self.remove_widget(self.blurControl)
@@ -56,6 +71,9 @@ class ThresholdingValues(Tool):
         self.remove_widget(self.shadowLabel)
 
     def update_photo(self, blur, highlight, shadow):
+        """Creates copy of image in cv2.
+        Replaces pixels with white/grey/black depending on boundary.
+        Converts to texture and replaces image texture."""
         self.img_source = cv2.imread(self.path, cv2.IMREAD_GRAYSCALE)
         temp = self.img_source.copy()
         blur = int(blur)
@@ -65,16 +83,17 @@ class ThresholdingValues(Tool):
         temp[np.where((temp <= [shadow]))] = [0]  # change pixels below shadow boundary to black
         temp[np.where((temp < highlight) & (temp > shadow))] = [100]  # change remaining pixels to grey
 
-        print(temp.shape)
+        #print(temp.shape)
         w, h = temp.shape
         texture = Texture.create(size=(h,w))
+        self.flip(texture)
         texture.blit_buffer(temp.flatten(), colorfmt='luminance', bufferfmt='ubyte')  # ????
         #w_img = Image(size=(w, h), texture=texture)
         self.ids.tool_image.texture = texture
 
     # i.e when pressed increase the value
     def on_blur(self, instance, blur):
-        print("blurb")
+        #print("blurb")
         #self.brightnessValue.text = "% d" % blur
         self.blurValue = blur
         self.update_photo(self.blurValue, self.highlightValue, self.shadowValue)
@@ -90,3 +109,9 @@ class ThresholdingValues(Tool):
 
     def mouse_pos(self, window, pos):
         self.label.text = "Mouse coords = " + str(pos)
+
+    def get_settings(self):
+        self.settings["highlightValue"] = self.highlightValue
+        self.settings["shadowValue"] = self.shadowValue
+        self.settings["blurValue"] = self.blurValue
+        return self.settings

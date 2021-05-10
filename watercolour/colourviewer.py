@@ -24,6 +24,7 @@ class ImageViewer(RelativeLayout):
     last_x, last_y = 0, 0
     panel = ObjectProperty(None)
     chart = None
+    colour = []
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -33,6 +34,8 @@ class ImageViewer(RelativeLayout):
 
         self.img_source = cv2.imread(
             'images/color_wheel.png', cv2.IMREAD_COLOR)
+
+    #def set_image(self):
 
     def on_touch_down(self, touch):
         with self.canvas:
@@ -56,17 +59,46 @@ class ImageViewer(RelativeLayout):
 
     def similar_colours(self):
         """Convert to cv2 to use numpy"""
-        display = cv2.imread(self.path, cv2.IMREAD_GRAYSCALE)
+        grey = cv2.imread(self.path, cv2.IMREAD_GRAYSCALE)
+        grey = cv2.cvtColor(grey, cv2.COLOR_GRAY2BGR)
         reference = cv2.imread(self.path, cv2.IMREAD_COLOR)
+        hsv = cv2.cvtColor(reference, cv2.COLOR_BGR2HSV)
 
-        #display[np.where((reference >= 200))] = [255]  # change pixels above highlight boundary to white
-        #temp[np.where((temp <= [shadow]))] = [0]  # change pixels below shadow boundary to black
-        #temp[np.where((temp < highlight) & (temp > shadow))] = [100]  # change remaining pixels to grey
+        #https://stackoverflow.com/questions/63498826/opencv-python-how-to-keep-one-color-as-is-converting-an-image-to-grayscale
+        #ret, mask = cv2.threshold(reference[:, :, 0], 100, 255, cv2.THRESH_BINARY)
 
+        bgr_colour = self.parent.parent.parent.colour_display.background_color
+        #print(colour) # convert to BGR
+        for c in range(0,2):
+            bgr_colour[c] *= 255
+            bgr_colour[c] = int(bgr_colour[c])
+        print(bgr_colour)
+        del bgr_colour[-1]
+        print(bgr_colour)
 
-        w, h = display.shape
+        hsv_colour = np.uint8([[bgr_colour]])
+        print(hsv_colour)
+        hsv_colour = cv2.cvtColor(hsv_colour, cv2.COLOR_BGR2HSV)
+
+        print("hsv)colour =", hsv_colour)
+
+        lower_bound = np.array(hsv_colour[0, 0, 0])  # get hue from hsv
+        upper_bound = np.array(hsv_colour[0, 0, 0]) + 40
+
+        print(lower_bound)
+        print(upper_bound)
+        #hsv_upper = cv2.cvtColor(hsv_upper, cv2.COL)
+
+ 
+
+        grey[np.where(hsv < upper_bound) & (hsv > lower_bound)]= [100]
+        out = grey
+
+        w, h, c = out.shape
         texture = Texture.create(size=(h,w))
-        texture.blit_buffer(display.flatten(), colorfmt='luminance', bufferfmt='ubyte')  # ????
+        texture.uvpos = (0, 1)
+        texture.uvsize = (1, -1)
+        texture.blit_buffer(out.flatten(), colorfmt='bgr', bufferfmt='ubyte')  # ????
         #w_img = Image(size=(w, h), texture=texture)
         self.ids.actual_image.texture = texture
 

@@ -46,7 +46,8 @@
             Button:
                 text: 'Confirm'
             Button:
-                text: 'Save'
+                text: 'Save Session'
+                on_release: self.parent.parent.parent.save_session()
 
         AnchorLayout:
             canvas:
@@ -226,9 +227,3 @@
     Image:
         id: tool_image
         source: '.\images\color_wheel.png'
-
-    BoxLayout:
-        id: settings
-        orientation: 'vertical'
-        #opacity: 1
-        #disabled: False
