@@ -50,11 +50,13 @@ class ImageViewer(RelativeLayout):
             real_x = int(x / stretch_factor)
             real_y = int(self.img.size[1] - (y / stretch_factor))
             self.last_x, self.last_y = real_x, real_y
-            if self.img.size[1] > real_x >= 0 and real_y < self.img.size[1] and real_y >= 0:
+            if self.collide_point(touch.x, touch.y):
                 self.update_colour_display(self.img.read_pixel(int(x / stretch_factor), int(self.img.size[1] - (y / stretch_factor))))
 
     def update_colour_display(self, new_colour):
+        print("new colour =", new_colour)
         self.parent.parent.parent.colour_display.background_color = new_colour
+        self.colour = new_colour.copy()
         #pass
 
     def similar_colours(self):
@@ -67,32 +69,39 @@ class ImageViewer(RelativeLayout):
         #https://stackoverflow.com/questions/63498826/opencv-python-how-to-keep-one-color-as-is-converting-an-image-to-grayscale
         #ret, mask = cv2.threshold(reference[:, :, 0], 100, 255, cv2.THRESH_BINARY)
 
-        bgr_colour = self.parent.parent.parent.colour_display.background_color
+        bgr_colour = self.colour.copy() #self.parent.parent.parent.colour_display.background_color
         #print(colour) # convert to BGR
-        for c in range(0,2):
+        for c in range(0,3):
             bgr_colour[c] *= 255
             bgr_colour[c] = int(bgr_colour[c])
         print(bgr_colour)
-        del bgr_colour[-1]
+        #del bgr_colour[-1]
         print(bgr_colour)
 
         hsv_colour = np.uint8([[bgr_colour]])
         print(hsv_colour)
-        hsv_colour = cv2.cvtColor(hsv_colour, cv2.COLOR_BGR2HSV)
+        hsv_colour = cv2.cvtColor(hsv_colour, cv2.COLOR_RGB2HSV)
 
         print("hsv)colour =", hsv_colour)
 
-        lower_bound = np.array(hsv_colour[0, 0, 0])  # get hue from hsv
-        upper_bound = np.array(hsv_colour[0, 0, 0]) + 40
+        lower_bound = np.array(hsv_colour[0, 0, 0]) - 10 # get hue from hsv
+        upper_bound = np.array(hsv_colour[0, 0, 0]) + 10
 
         print(lower_bound)
         print(upper_bound)
         #hsv_upper = cv2.cvtColor(hsv_upper, cv2.COL)
+        print(grey.shape)
 
- 
+        hue = hsv[:,:,0]
+        print(hue)
+        area = np.where((hue < lower_bound) | (hue > upper_bound))
+        print(area[0])
+        reference[area[0], area[1], :] = [0,0,0] #bgr_colour
+        out = cv2.cvtColor(grey, cv2.COLOR_HSV2BGR)
+        out[area] = reference[area]
 
-        grey[np.where(hsv < upper_bound) & (hsv > lower_bound)]= [100]
-        out = grey
+        out = reference
+        out[area] = grey[area]
 
         w, h, c = out.shape
         texture = Texture.create(size=(h,w))

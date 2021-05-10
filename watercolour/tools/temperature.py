@@ -1,18 +1,42 @@
+from scipy.interpolate import UnivariateSpline
+
 from watercolour.tool import Tool
 from kivy.uix.slider import Slider
 from kivy.graphics.texture import Texture
 import cv2
 import numpy as np
-
+import ast
+from color_temp import temperature_to_rgb
 
 class Temperature(Tool):
     coolValue = 1
-    coolControl = Slider(min=0, max=255, value=0)
+    coolControl = Slider(min=35, max=65, value=50)
     warmValue = 1
     warmControl = Slider(min=0, max=255, value=0)
+    kelvin = {}
+    lookup = []
+    lookuptable = []
 
     def __init__(self, path):
         super().__init__(path)
+        f = open(".\watercolour\kelvin", "r")
+        contents = f.read()
+        self.kelvin = ast.literal_eval(contents)
+        f.close()
+
+        #for i in range(1000, 26600, 100):
+        #    print(i)
+        #    rgb = temperature_to_rgb(i)
+        #    print(i, rgb)
+        #    self.lookup.append(rgb)
+        #self.lookup = np.array(self.lookup).clip(0, 255).astype('uint8')
+        #print(len(self.lookup))
+        #y = list(range(1000, 26600, 100))
+        #self.lookuptable = self.spreadLookupTable(y, self.lookup)
+
+    def spreadLookupTable(self, x, y):
+        spline = UnivariateSpline(x, y)
+        return spline(range(256))
 
     def add_settings(self):
         self.add_widget(self.coolControl)
@@ -32,55 +56,29 @@ class Temperature(Tool):
         self.warmValue = warm
         self.update_photo(self.coolValue, self.warmValue)
 
-    def update_photo(self, cool, warm):
+    # slider should be a number from 0 - 100
+    def adjustTemps(self, slider):
+        default_temps = [0, 64, 128, 256]
+        factor = slider / 50
+        new_temps = [min(int(i * factor), 256) for i in default_temps]
+        new_temps[len(new_temps) - 1] = 256
+        print(slider, new_temps)
+        return new_temps
+
+    def update_photo(self, temperature, warm):
         self.img_source = cv2.imread(self.path)
-        temp = self.img_source.copy()
+        other = self.img_source.copy()
 
-        #for index, pixel in np.ndenumerate(temp):  # iterate 2D array with index and pixel (array of RGB)
-        #    print(index, pixel)
-        #    red = pixel[0]
-        #    temp.itemset((index[0], index[1], 2), red * self.warmValue)
-
-        """
-        pixel_index = 0
-        row_index = 0
-        for row in temp:  # iterate 2D array with index and pixel (array of RGB)
-            for pixel in row:
-                red = pixel[0]
-                print(pixel_index)
-                print(temp.shape)
-                #print("pixel", pixel)
-                #print("red", red)
-                #print("other", temp[pixel_index][0])
-                print(temp[row_index, pixel_index])
-                temp[row_index, pixel_index, 0] = red * self.warmValue
-                #print("last", temp[pixel_index][0])
-                #temp.itemset((index[0], index[1], 2), red * self.warmValue)
-
-                pixel_index += 1
-            row_index += 1
-        """
-        for x in range(0, temp.shape[0]):
-            for y in range(0, temp.shape[1]):
-                red = temp[x, y, 0]
-                #print(temp[x,y])
-                temp[x, y, 0] = red * self.warmValue
-
-        b, g, r = cv2.split(temp)
-        cool_lim = 255 - cool
-        warm_lim = 255 - warm
-        b[b<=cool_lim] += int(cool)
-        r[r<=warm_lim] += int(warm)
-
-        #b = int(cool_lim)
-        #temp[np.all(temp == (0, 0, 255), axis=-1)] = (:,:,cool_lim)
-
-        temp = cv2.merge([b,g,r])#[np.uint8(b), np.uint8(g), np.uint8(r)])
-        #b[b>cool_lim] = 255
-        #b[b <= cool_lim] += int(cool)
+        increaseLookupTable = self.spreadLookupTable([0, 64, 128, 256], self.adjustTemps(temperature))
+        decreaseLookupTable = self.spreadLookupTable([0, 64, 128, 256], self.adjustTemps(100 - temperature))
 
 
-        #print("shape = ", temp.shape)
+        blue_channel, green_channel, red_channel = cv2.split(other)
+        red_channel = cv2.LUT(red_channel, increaseLookupTable).astype(np.uint8)
+        blue_channel = cv2.LUT(blue_channel, decreaseLookupTable).astype(np.uint8)
+        #temp = cv2.merge((red_channel, green_channel, blue_channel))
+        temp = cv2.merge((blue_channel, green_channel, red_channel))
+
         w, h, c = temp.shape
         texture = Texture.create(size=(h,w))
         self.flip(texture)

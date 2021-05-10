@@ -9,7 +9,7 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.graphics.texture import Texture
-
+from kivy.uix.checkbox import CheckBox
 class ButtonGrid(ButtonBehavior, GridLayout):
     pass
 
@@ -25,6 +25,7 @@ class Tool(BoxLayout):
     visible = False
     btn = None
     settings = {}
+    checkbox = None
 
     def __init__(self, path):
         """Initialises tool object."""
@@ -118,3 +119,10 @@ class Tool(BoxLayout):
         texture.uvpos = (0, 1)
         texture.uvsize = (1, -1)
         return texture
+
+    def open_remove_checkbox(self):
+        self.checkbox = CheckBox(color=[1,0,1,1])
+        self.add_widget(self.checkbox)
+
+    def close_remove_checkbox(self):
+        self.remove_widget(self.checkbox)

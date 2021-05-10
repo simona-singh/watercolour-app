@@ -8,7 +8,8 @@ from watercolour.tools.saturation import Saturation
 from watercolour.tools.temperature import Temperature
 from watercolour.tools.thresholdingvalues import ThresholdingValues
 from kivy.factory import Factory
-
+from kivy.uix.checkbox import CheckBox
+from kivy.uix.button import Button
 Factory.register('saturation', cls=Saturation)
 
 class ToolManager(GridLayout):
@@ -73,3 +74,29 @@ class ToolManager(GridLayout):
     def get_tools(self):
         """Returns list of tool objects."""
         return self.tools
+
+    def open_remove_checkboxes(self, event):
+        print("inside")
+        confirm = Button(text='Confirm')
+        self.ids.buttons.add_widget(confirm)
+        print(self.ids.remove_btn.text)
+        for tool in self.tools:
+            tool.open_remove_checkbox()
+        self.ids.remove_btn.text = 'Cancel'
+        self.ids.remove_btn.bind(on_press=self.close_remove_checkboxes)
+        #self.ids.remove_btn.on_release = self.close_remove_checkboxes
+
+    def close_remove_checkboxes(self, event):
+        self.ids.remove_btn.text = 'Remove'
+        self.ids.remove_btn.bind(on_press=self.open_remove_checkboxes)
+        #self.ids.remove_btn.on_release = self.open_remove_checkboxes
+        for tool in self.tools:
+            tool.open_remove_checkbox()
+
+    def zoom_in(self):
+        for tool in self.tools:
+            h = tool.ids.tool_image.height
+            tool.ids.tool_image.height = h + 10
+
+    def zoom_out(self):
+        pass
