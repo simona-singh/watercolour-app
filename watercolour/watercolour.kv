@@ -76,7 +76,7 @@
         orientation: "vertical"
         FileChooserListView:
             id: filechooser
-            path: 'D:\Projects\watercolour-app\images'
+            path: './images'
 
         BoxLayout:
             size_hint_y: None
@@ -208,12 +208,7 @@
         size_hint_x: 1
 
         GridLayout:
-            canvas:
-                Color:
-                    rgba: 0, 1, 0, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+
 
             id: widget_display
 
