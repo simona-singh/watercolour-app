@@ -4,6 +4,81 @@
 This system provides various tools for analysing reference photos.
 Interpret the visualised features for use in your watercolour painting.
 
+# Table of Contents
+- [Features](#features)
+    - [File Chooser](#file-chooser)
+    - [Colour Viewer](#colour-viewer)
+        - [View exact colour](#view-exact-colour)
+        - [View areas of similar colour](#view-areas-of-similar-colour)
+        - [Colour palette chart](#colour-palette-chart)
+    - [Tool Dashboard](#tool-dashboard)
+        - [View colour values](#view-colour-values)
+        - [Adjust colour temperature](#adjust-colour-temperature)
+        - [Adjust colour saturation](#adjust-colour-saturation)
+- [Installation](#installation)
+- [Repository Structure](#structure)
+- [Links](#links)
+
+
+# Features
+
+## File Chooser
+Load and view images. Save and load sessions.
+
+
+## Colour Viewer
+
+### View exact colour
+Click anywhere on the image to view the exact colour in the bottom-left colour box.
+
+### View areas of similar colour
+After selecting a colour, clicking the "similar" button will highlight all the areas of similar colour over 
+a greyscale image.
+
+Original           |  ![Apple original](documentation/readme_data/buildings3_colourviewer.PNG)  
+:-------------------------:|:-------------------------:
+Yellow   | ![Apple original](documentation/readme_data/buildings3_similarcolours.PNG)
+ Blue  |   ![Apple original](documentation/readme_data/buildings3_similarcolours2.PNG)  
+
+
+
+### Colour palette chart
+A chart showing the average colours to form a colour palette is generated upon loading an image.
+
+## Tool Dashboard
+
+Multiple tools can be added to the dashboard for comparison. Use the zoom in/out buttons.
+
+### View colour values
+Splits the image into shadows, mid-tones, and highlights. Adjust the minimum and maximum thresholds to suit the image. 
+Increase the blur value to smooth the shapes and outlines.
+
+Original apple image          |  Apple split into three values
+:-------------------------:|:-------------------------:
+![Apple original](documentation/readme_data/apple.png)   |  ![Apple values](documentation/readme_data/apple_values.PNG)
+
+
+### Adjust colour temperature
+Move the slider to make the image warmer or cooler. The center is neutral.
+
+Cool         |  Original | Warm
+:-------------------------:|:-------------------------:|:-------------------------:
+![Apple original](documentation/readme_data/lantern1_temperature_cool.PNG)  |   ![Apple original](documentation/readme_data/Lantern1.png)  |   ![Apple original](documentation/readme_data/lantern1_temperature_warm.PNG)
+
+### Adjust colour saturation
+Move the slider to increase or decrease the level of saturation.
+
+### View average colour areas
+Adjust the slide to view the image split into X averaged colours. This can be slow.
+
+Original           |  2 colours  
+:-------------------------:|:-------------------------:
+![Apple original](documentation/readme_data/pier0.png) | ![Apple original](documentation/readme_data/pier1.png)
+ 3 colours  |   6 colours 
+ ![Apple original](documentation/readme_data/pier2.png) | ![Apple original](documentation/readme_data/pier6.png)
+
+
+
 # Installation
 
 ## Install Anaconda:
@@ -58,7 +133,9 @@ Interpret the visualised features for use in your watercolour painting.
 ./
 	The main program is accessed and ran from here.
 
-# Test Image URLS
+# Links
+
+Images used for testing:
 
 https://ceklog.kindel.com/2013/02/19/why-nobody-can-copy-apple/
 Apple image
