@@ -1,8 +1,8 @@
 
-# Watercolour Aid Program
+# Photo Feature Analysis for Watercolour Painting
 
 This system provides various tools for analysing reference photos.
-Inteperet the visualised features for use in your watercolour painting.
+Interpret the visualised features for use in your watercolour painting.
 
 # Installation
 
@@ -24,8 +24,8 @@ Inteperet the visualised features for use in your watercolour painting.
  - `python ./main.py`
 
 # Troubleshooting installation
-## Install scipi from whl:
- If when installing requirements Scipy fails to install, you may need to install Scipy from a whl file, using the folowing instructions:
+## Install SciPi from whl:
+ When installing requirements, should SciPy fail to install, you may need to install SciPy from a whl file, using the folowing instructions:
  - Go to https://www.lfd.uci.edu/~gohlke/pythonlibs/
  - Find Scipi
  - Find scipy‑1.5.4‑cp39‑cp39‑win_amd64.whl and download
@@ -66,7 +66,7 @@ Apple image
 https://www.flickr.com/photos/jocelyn777/46424164764/
 Buildings 1
 
-https://www.flickr.com/photos/130426118@N08/44162429861/
+<https://www.flickr.com/photos/130426118@N08/44162429861/>
 Cricket
 
 https://www.flickr.com/photos/keepitsurreal/4002796077/
@@ -105,7 +105,7 @@ Nutsseds
 https://www.flickr.com/photos/andrew_kearns_photography/48715281066/
 Arch
 
-https://www.flickr.com/photos/158652122@N02/27172745038/
+<https://www.flickr.com/photos/158652122@N02/27172745038/>
 Stairs
 
 https://www.flickr.com/photos/gaelvaroquaux/26309500128/
@@ -117,13 +117,14 @@ Flowers3
 https://www.flickr.com/photos/duncanh1/51076393906/
 Flowers4
 
-https://www.flickr.com/photos/8602028@N04/522512821/
+<https://www.flickr.com/photos/8602028@N04/522512821/>
 Fruit
 
-https://www.flickr.com/photos/155376904@N07/30108395527/
+<https://www.flickr.com/photos/155376904@N07/30108395527/>
 Leafmacro1
 
 https://www.flickr.com/photos/archeon/3045918295/
 Macaw
+
 https://www.flickr.com/photos/pimthida/14407749155/
 Macaw_multiple_subjects
